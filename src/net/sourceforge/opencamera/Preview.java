@@ -304,7 +304,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		// Camera driver coordinates range from (-1000, -1000) to (1000, 1000).
 		// UI coordinates range from (0, 0) to (width, height).
 		camera_to_preview_matrix.postScale(this.getWidth() / 2000f, this.getHeight() / 2000f);
-		camera_to_preview_matrix.postTranslate(this.getWidth() / 2f, this.getHeight() / 2f);
+		camera_to_preview_matrix.postTranslate(this.getWidth() / 2f, this.getHeight() / 2f);		
 	}
 
 	private void calculatePreviewToCameraMatrix() {

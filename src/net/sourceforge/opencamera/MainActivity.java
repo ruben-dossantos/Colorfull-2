@@ -139,11 +139,7 @@ public class MainActivity extends Activity {
 		// hack to rule out phones unlikely to have 4K video, so no point even offering the option!
 		// both S5 and Note 3 have 128MB standard and 512MB large heap (tested via Samsung RTL), as does Galaxy K Zoom
 		// also added the check for having 128MB standard heap, to support modded LG G2, which has 128MB standard, 256MB large - see https://sourceforge.net/p/opencamera/tickets/9/
-		if( activityManager.getMemoryClass() >= 128 || activityManager.getLargeMemoryClass() >= 512 ) {
-			supports_force_video_4k = true;
-		}
-		if( MyDebug.LOG )
-			Log.d(TAG, "supports_force_video_4k? " + supports_force_video_4k);
+		
 
         setWindowFlagsForCamera();
 
@@ -589,14 +585,7 @@ public class MainActivity extends Activity {
 			view.setLayoutParams(layoutParams);
 			view.setRotation(ui_rotation);
 	
-			view = findViewById(R.id.popup);
-			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
-			layoutParams.addRule(align_parent_top, RelativeLayout.TRUE);
-			layoutParams.addRule(align_parent_bottom, 0);
-			layoutParams.addRule(left_of, R.id.gallery);
-			layoutParams.addRule(right_of, 0);
-			view.setLayoutParams(layoutParams);
-			view.setRotation(ui_rotation);
+			
 	
 			view = findViewById(R.id.exposure_lock);
 			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
@@ -607,6 +596,7 @@ public class MainActivity extends Activity {
 			view.setLayoutParams(layoutParams);
 			view.setRotation(ui_rotation);
 	
+			/*
 			view = findViewById(R.id.exposure);
 			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
 			layoutParams.addRule(align_parent_top, RelativeLayout.TRUE);
@@ -615,26 +605,9 @@ public class MainActivity extends Activity {
 			layoutParams.addRule(right_of, 0);
 			view.setLayoutParams(layoutParams);
 			view.setRotation(ui_rotation);
+			*/
 	
-			view = findViewById(R.id.switch_video);
-			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
-			layoutParams.addRule(align_parent_top, RelativeLayout.TRUE);
-			layoutParams.addRule(align_parent_bottom, 0);
-			layoutParams.addRule(left_of, R.id.exposure);
-			layoutParams.addRule(right_of, 0);
-			view.setLayoutParams(layoutParams);
-			view.setRotation(ui_rotation);
-	
-			view = findViewById(R.id.switch_camera);
-			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
-			layoutParams.addRule(align_parent_left, 0);
-			layoutParams.addRule(align_parent_right, 0);
-			layoutParams.addRule(align_parent_top, RelativeLayout.TRUE);
-			layoutParams.addRule(align_parent_bottom, 0);
-			layoutParams.addRule(left_of, R.id.switch_video);
-			layoutParams.addRule(right_of, 0);
-			view.setLayoutParams(layoutParams);
-			view.setRotation(ui_rotation);
+			
 	
 			view = findViewById(R.id.trash);
 			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
@@ -654,12 +627,7 @@ public class MainActivity extends Activity {
 			view.setLayoutParams(layoutParams);
 			view.setRotation(ui_rotation);
 	
-			view = findViewById(R.id.take_photo);
-			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
-			layoutParams.addRule(align_parent_left, 0);
-			layoutParams.addRule(align_parent_right, RelativeLayout.TRUE);
-			view.setLayoutParams(layoutParams);
-			view.setRotation(ui_rotation);
+			
 	
 			view = findViewById(R.id.zoom);
 			layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
@@ -761,15 +729,7 @@ public class MainActivity extends Activity {
 						view.setTranslationY( - view.getWidth() );
 				}
 			}
-		}
-
-		{
-			// set icon for taking photos vs videos
-			ImageButton view = (ImageButton)findViewById(R.id.take_photo);
-			if( preview != null ) {
-				view.setImageResource(preview.isVideo() ? R.drawable.take_video_selector : R.drawable.take_photo_selector);
-			}
-		}
+		}		
     }
 
     private void onOrientationChanged(int orientation) {
