@@ -36,6 +36,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Paint.Align;
+import android.hardware.Camera.Parameters;
+import android.hardware.Camera.Size;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -68,8 +70,9 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.hardware.Camera;
 
-public class Preview extends SurfaceView implements SurfaceHolder.Callback {
+public class Preview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
 	private static final String TAG = "Preview";
 
 	private static final String TAG_GPS_IMG_DIRECTION = "GPSImgDirection";
@@ -238,6 +241,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	public boolean test_have_angle = false;
 	public float test_angle = 0.0f;
 	public String test_last_saved_image = null;
+	
+	
+	
+	//Color
+	private int[] pixels;
+    private Size previewSize;
+    private Parameters parameters;
+	
 
 	@SuppressWarnings("deprecation")
 	Preview(Context context, Bundle savedInstanceState) {
@@ -419,6 +430,20 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         }
         
 		tryAutoFocus(false, true);
+		
+		int x = (int) event.getX();
+		int y = (int) event.getY();
+
+        //Toast.makeText(getContext(), "x = " + x + ", y = " + y, Toast.LENGTH_SHORT).show();
+        
+        
+        int idx = ( previewSize.height * y ) + x;
+        int color = pixels[idx];
+        
+        Toast.makeText(getContext(), "RGB = " + idx, Toast.LENGTH_SHORT).show();
+
+        System.out.println("RGB: " + Integer.toHexString(pixels[0]));
+        
 		return true;
     }
 
@@ -455,6 +480,10 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		this.has_surface = true;
 		this.openCamera();
 		this.setWillNotDraw(false); // see http://stackoverflow.com/questions/2687015/extended-surfaceviews-ondraw-method-never-called
+		
+		parameters = camera_controller.getCameraParameters();
+        previewSize = parameters.getPreviewSize();
+        pixels = new int[previewSize.width * previewSize.height];
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
@@ -5348,5 +5377,45 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     
     public boolean isFocusWaiting() {
     	return focus_success == FOCUS_WAITING;
+    }
+
+	@Override
+	public void onPreviewFrame(byte[] data, Camera camera) {
+		decodeYUV420SP(pixels, data, previewSize.width,  previewSize.height);
+        //Outuput the value of the top left pixel in the preview to LogCat
+        Log.i("Pixels", "The top right pixel has the following RGB (hexadecimal) values:" + Integer.toHexString(pixels[0]));
+		
+	}
+	
+	//Method from Ketai project! Not mine! See below...
+    void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
+
+        final int frameSize = width * height;
+
+        for (int j = 0, yp = 0; j < height; j++) {       int uvp = frameSize + (j >> 1) * width, u = 0, v = 0;
+            for (int i = 0; i < width; i++, yp++) {
+                int y = (0xff & ((int) yuv420sp[yp])) - 16;
+                if (y < 0)
+                    y = 0;
+                if ((i & 1) == 0) {
+                    v = (0xff & yuv420sp[uvp++]) - 128;
+                    u = (0xff & yuv420sp[uvp++]) - 128;
+                }
+
+                int y1192 = 1192 * y;
+                int r = (y1192 + 1634 * v);
+                int g = (y1192 - 833 * v - 400 * u);
+                int b = (y1192 + 2066 * u);
+
+                if (r < 0) 		           r = 0; 		        else if (r > 262143)
+                    r = 262143;
+                if (g < 0) 		           g = 0; 		        else if (g > 262143)
+                    g = 262143;
+                if (b < 0) 		           b = 0; 		        else if (b > 262143)
+                    b = 262143;
+
+                rgb[yp] = 0xff000000 | ((r << 6) & 0xff0000) | ((g >> 2) & 0xff00) | ((b >> 10) & 0xff);
+            }
+        }
     }
 }

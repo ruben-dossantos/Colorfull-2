@@ -8,6 +8,7 @@ import java.util.List;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.ImageFormat;
+import android.hardware.Camera.Parameters;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -606,6 +607,12 @@ public class CameraController2 extends CameraController {
 
 	@Override
 	String getParametersString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Parameters getCameraParameters() {
 		// TODO Auto-generated method stub
 		return null;
 	}

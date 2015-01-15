@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import android.annotation.TargetApi;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.location.Location;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -951,5 +952,10 @@ class CameraController1 extends CameraController {
 	
 	String getParametersString() {
 		return this.getParameters().flatten();
+	}
+
+	@Override
+	Parameters getCameraParameters() {
+		return camera.getParameters();		
 	}
 }

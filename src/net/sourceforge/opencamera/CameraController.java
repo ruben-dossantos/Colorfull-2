@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.graphics.Rect;
+import android.hardware.Camera.Parameters;
 import android.location.Location;
 import android.media.MediaRecorder;
 import android.view.SurfaceHolder;
@@ -88,6 +89,8 @@ public abstract class CameraController {
 	}
 
 	abstract void release();
+	
+	abstract Parameters getCameraParameters();
 
 	abstract CameraFeatures getCameraFeatures();
 	abstract SupportedValues setSceneMode(String value);
