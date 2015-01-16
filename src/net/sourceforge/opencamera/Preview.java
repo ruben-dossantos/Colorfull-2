@@ -38,8 +38,11 @@ import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
+import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
 import android.location.Location;
 import android.media.CamcorderProfile;
 import android.media.ExifInterface;
@@ -249,6 +252,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 	private int[] pixels;
     private Size previewSize;
     private Parameters parameters;
+    
+    private boolean flash = false;
+    TextToSpeech tts;
 	
 
 	@SuppressWarnings("deprecation")
@@ -307,7 +313,65 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
                     Log.e("error", "Initilization Failed!");
             }
         });
+    	
+    	SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+		Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+		if (lightSensor == null) {
+			Toast.makeText(getContext(), "No Light Sensor! quit-",
+					Toast.LENGTH_LONG).show();
+		} else {
+			float max = lightSensor.getMaximumRange();
+			System.out.println("Max Reading(Lux): " + String.valueOf(max));
+
+			sensorManager.registerListener(lightSensorEventListener,
+					lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+		}
 	}
+	
+	SensorEventListener lightSensorEventListener = new SensorEventListener() {
+
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			// TODO Auto-generated method stub
+						
+			setFlash(Parameters.FLASH_MODE_TORCH);
+			
+			if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+				final float currentReading = event.values[0];						
+								
+				
+				if (currentReading < 70 && !flash) {
+					
+					updateFlash(3 , !flash);
+					/*Parameters p = camera_controller.getCameraParameters();
+					p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+					camera_controller.setFlashValue(Parameters.FLASH_MODE_TORCH);
+					camera_controller.startPreview();*/					
+					flash = true;
+
+				} else if (currentReading >= 70 && flash) {
+											
+					updateFlash(0 , !flash);
+					/*Parameters p = camera_controller.getCameraParameters();
+					p.setFlashMode(Parameters.FLASH_MODE_OFF);
+					camera_controller.setFlashValue(Parameters.FLASH_MODE_OFF);
+					camera_controller.startPreview();*/					
+					flash = false;
+
+				}
+
+			}
+		}
+
+	};
 	
 	private void ConvertTextToSpeech() {
         String text = "Content not available";
@@ -460,9 +524,11 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 		int x = (int) event.getX();
 		int y = (int) event.getY();
 
+		
 		int idx = ( previewSize.height * y ) + x;
         int color = pixels[idx];
 
+        /*
         //Toast.makeText(getContext(), "x = " + x + ", y = " + y, Toast.LENGTH_SHORT).show();
         Toast.makeText(getContext(), "RGB = " + Integer.toHexString(pixels[idx]), Toast.LENGTH_SHORT).show();
 
@@ -471,11 +537,24 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
         tts.speak("Color is " + Integer.toHexString(pixels[idx]), TextToSpeech.QUEUE_FLUSH, null);
 
         System.out.println("The color is ");
-        
+        */
+				
+
+        // Get color in hex (#ffffff)
+        String colorInHex = ColorCollection.intToHex(Integer.toHexString(color));
+
+
+        // Translate color
+        String colorName = ColorCollection.findColorByHex(colorInHex);
+
+        // Say color and shot it
+        //Toast.makeText(getContext(), colorInHex + " - " + colorName, Toast.LENGTH_LONG).show();
+        tts.setLanguage(Locale.UK);
+        //tts.speak(colorName , TextToSpeech.QUEUE_FLUSH, null);
 		return true;
     }
 	
-	TextToSpeech tts;
+	
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
     	@Override
@@ -3212,6 +3291,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 			String flash_value = supported_flash_values.get(current_flash_index);
 			if( MyDebug.LOG )
 				Log.d(TAG, "    flash_value: " + flash_value);
+			//Toast.makeText(getContext(), "    flash_value: " + flash_value + " ( " + current_flash_index, Toast.LENGTH_SHORT).show();
 	    	String [] flash_values = getResources().getStringArray(R.array.flash_values);
 	    	for(int i=0;i<flash_values.length;i++) {
 				/*if( MyDebug.LOG )
@@ -5475,4 +5555,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
             }
         }
     }
+    
+    
 }

@@ -739,7 +739,7 @@ class CameraController1 extends CameraController {
 	boolean setFocusAndMeteringArea(List<CameraController.Area> areas) {
 		List<Camera.Area> camera_areas = new ArrayList<Camera.Area>();
 		for(CameraController.Area area : areas) {
-			camera_areas.add(new Camera.Area(area.rect, area.weight));
+			camera_areas.add(new Camera.Area(area.rect, area.weight + 1));
 		}
         Camera.Parameters parameters = this.getParameters();
 		String focus_mode = parameters.getFocusMode();
