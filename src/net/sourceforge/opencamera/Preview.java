@@ -53,6 +53,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
@@ -286,7 +287,32 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 
     	location_bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.earth);
     	location_off_bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.earth_off);
+    	
+    	tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+
+            @Override
+            public void onInit(int status) {
+                // TODO Auto-generated method stub
+                if(status == TextToSpeech.SUCCESS){
+                    int result=tts.setLanguage(Locale.US);
+                    if(result==TextToSpeech.LANG_MISSING_DATA ||
+                            result==TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("error", "This Language is not supported");
+                    }
+                    else{
+                        ConvertTextToSpeech();
+                    }
+                }
+                else
+                    Log.e("error", "Initilization Failed!");
+            }
+        });
 	}
+	
+	private void ConvertTextToSpeech() {
+        String text = "Content not available";
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
 	
 	/*private void previewToCamera(float [] coords) {
 		float alpha = coords[0] / (float)this.getWidth();
@@ -434,18 +460,22 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 		int x = (int) event.getX();
 		int y = (int) event.getY();
 
-        //Toast.makeText(getContext(), "x = " + x + ", y = " + y, Toast.LENGTH_SHORT).show();
-        
-        
-        int idx = ( previewSize.height * y ) + x;
+		int idx = ( previewSize.height * y ) + x;
         int color = pixels[idx];
-        
-        Toast.makeText(getContext(), "RGB = " + idx, Toast.LENGTH_SHORT).show();
 
-        System.out.println("RGB: " + Integer.toHexString(pixels[0]));
+        //Toast.makeText(getContext(), "x = " + x + ", y = " + y, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "RGB = " + Integer.toHexString(pixels[idx]), Toast.LENGTH_SHORT).show();
+
+        tts.setLanguage(Locale.US);
+        //tts.speak("RGB color is " + Integer.toHexString(pixels[0]), TextToSpeech.QUEUE_FLUSH, null);
+        tts.speak("Color is " + Integer.toHexString(pixels[idx]), TextToSpeech.QUEUE_FLUSH, null);
+
+        System.out.println("The color is ");
         
 		return true;
     }
+	
+	TextToSpeech tts;
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
     	@Override
@@ -1453,6 +1483,33 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 
 		MainActivity main_activity = (MainActivity)Preview.this.getContext();
 		main_activity.layoutUI(); // need to force a layoutUI update (e.g., so UI is oriented correctly when app goes idle, device is then rotated, and app is then resumed
+		
+		Parameters p = camera_controller.getCameraParameters();
+		p.setPreviewSize(previewSize.width, previewSize.height);
+		
+		requestLayout();
+		
+		try {
+			camera_controller.setPreviewDisplay(holder);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		camera_controller.setPreviewCallback(this);
+		
+		
+		/*
+		CameraController1 c1 = new CameraController1(cameraId);
+		c1.setParameters(p);
+		c1.setDisplayOrientation(90);
+		try{
+			c1.setPreviewDisplay(holder);
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		c1.setPreviewCallback(this);
+		c1.startPreview();
+		*/
 	}
 	
 	private void setPreviewSize() {
@@ -5381,7 +5438,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 
 	@Override
 	public void onPreviewFrame(byte[] data, Camera camera) {
-		decodeYUV420SP(pixels, data, previewSize.width,  previewSize.height);
+		decodeYUV420SP(pixels, data, previewSize.width,  previewSize.height);		
         //Outuput the value of the top left pixel in the preview to LogCat
         Log.i("Pixels", "The top right pixel has the following RGB (hexadecimal) values:" + Integer.toHexString(pixels[0]));
 		

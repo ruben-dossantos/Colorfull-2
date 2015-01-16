@@ -617,4 +617,11 @@ public class CameraController2 extends CameraController {
 		return null;
 	}
 
+	@Override
+	void setPreviewCallback(Preview preview) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
 }

@@ -155,4 +155,7 @@ public abstract class CameraController {
 	abstract void unlock();
 	abstract void initVideoRecorder(MediaRecorder video_recorder);
 	abstract String getParametersString();
+	
+	
+	abstract void setPreviewCallback(Preview preview);
 }

@@ -958,4 +958,14 @@ class CameraController1 extends CameraController {
 	Parameters getCameraParameters() {
 		return camera.getParameters();		
 	}
+	
+	public void setParameters(Parameters p){
+		camera.setParameters(p);
+	}
+
+	@Override
+	public void setPreviewCallback(Preview preview) {
+		camera.setPreviewCallback(preview);
+		
+	}
 }
