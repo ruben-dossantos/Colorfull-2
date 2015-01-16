@@ -27,7 +27,7 @@ public class ColorCollection {
             Color cor = getColors().get(i);
 
             if(hex.compareTo(cor.getHex()) == 0 || hex.compareTo(cor.getHex()) < 0)
-                return cor.getName();
+                return cor.getName();            
 
 
             /*

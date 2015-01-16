@@ -255,6 +255,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
     
     private boolean flash = false;
     TextToSpeech tts;
+    ColorCollection colorCollection;
 	
 
 	@SuppressWarnings("deprecation")
@@ -328,6 +329,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
 					lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
 		}
+		
+		colorCollection = new ColorCollection();
 	}
 	
 	SensorEventListener lightSensorEventListener = new SensorEventListener() {
@@ -548,9 +551,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, Came
         String colorName = ColorCollection.findColorByHex(colorInHex);
 
         // Say color and shot it
-        //Toast.makeText(getContext(), colorInHex + " - " + colorName, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), colorInHex + " - " + colorName, Toast.LENGTH_LONG).show();
         tts.setLanguage(Locale.UK);
-        //tts.speak(colorName , TextToSpeech.QUEUE_FLUSH, null);
+        tts.speak(colorName , TextToSpeech.QUEUE_FLUSH, null);
 		return true;
     }
 	
