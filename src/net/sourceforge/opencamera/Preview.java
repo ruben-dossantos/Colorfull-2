@@ -567,14 +567,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 		int idx = (previewSize.height * y) + x;
 		int color = pixels[idx];
 
-		int[] colors = new int[1600];
+		int[] colors = new int[400];
 		int count = 0;
 		int tx = 0, ty = 0;
 		// Toast.makeText(getContext(), x + " - " + y,
 		// Toast.LENGTH_SHORT).show();
 
-		for (int i = x - 20; i < x + 20; i++) {
-			for (int j = y - 20; j < y + 20; j++) {
+		for (int i = x - 10; i < x + 10; i++) {
+			for (int j = y - 10; j < y + 10; j++) {
 				if (i < 0) {
 					tx = 0;
 				} else {
@@ -613,7 +613,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 
 		// Get color in hex (#ffffff)
 		String colorInHex = ColorCollection.intToHex(Integer
-				.toHexString(popular));
+				.toHexString(popular));			
 
 		String red = colorInHex.substring(1, 3);
 		int red_percentage = decToPer(hexToDec(red));
@@ -622,12 +622,19 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 		String blue = colorInHex.substring(5, 7);
 		int blue_percentage = decToPer(hexToDec(blue));
 		String c = rgbToColor(red_percentage, green_percentage, blue_percentage);
+		
+		Toast.makeText(getContext(), 
+				"popular = " + colorInHex+ 
+				"r->" + red_percentage +
+				"g->" + green_percentage + 
+				"b->" + blue_percentage
+				, 5).show();
 
 		// Translate color
 		String colorName = ColorCollection.findColorByHex(colorInHex);
 
 		// Say color and shot it
-		Toast.makeText(getContext(), colorInHex + " - " + c, 5).show();
+		//Toast.makeText(getContext(), colorInHex + " - " + c, 5).show();
 		tts.setLanguage(Locale.UK);
 		tts.speak(c, TextToSpeech.QUEUE_FLUSH, null);
 		return true;
@@ -669,17 +676,33 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 			return "white";
 		String c = "";
 		switch ((int) r / 25) {
-		case 1:
+		case 0:
 			switch ((int) g / 25) {
-			case 1:
+			case 0:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "darkish grey";
 					break;
-				case 2:
+				case 1:
 					c = "darkish purple";
 					break;
-				case 3:
+				case 2:
+					c = "blue";
+					break;
+				default:
+					c = "blue";
+					break;
+				}
+				break;
+			case 1:
+				switch ((int) b / 25) {
+				case 0:
+					c = "green";
+					break;
+				case 1:
+					c = "ocean blue";
+					break;
+				case 2:
 					c = "blue";
 					break;
 				default:
@@ -689,29 +712,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			case 2:
 				switch ((int) b / 25) {
+				case 0:
+					c = "green";
+					break;
 				case 1:
 					c = "green";
 					break;
 				case 2:
-					c = "ocean blue";
-					break;
-				case 3:
-					c = "blue";
-					break;
-				default:
-					c = "blue";
-					break;
-				}
-				break;
-			case 3:
-				switch ((int) b / 25) {
-				case 1:
-					c = "green";
-					break;
-				case 2:
-					c = "green";
-					break;
-				case 3:
 					c = "cian";
 					break;
 				default:
@@ -721,13 +728,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			default:
 				switch ((int) b / 25) {
+				case 0:
+					c = "green";
+					break;
 				case 1:
 					c = "green";
 					break;
 				case 2:
-					c = "green";
-					break;
-				case 3:
 					c = "cian";
 					break;
 				default:
@@ -738,17 +745,17 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 			}
 
 			break;
-		case 2:
+		case 1:
 			switch ((int) g / 25) {
-			case 1:
+			case 0:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "bordeux";
 					break;
-				case 2:
+				case 1:
 					c = "purple";
 					break;
-				case 3:
+				case 2:
 					c = "purple";
 					break;
 				default:
@@ -756,15 +763,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 					break;
 				}
 				break;
-			case 2:
+			case 1:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "light brown";
 					break;
-				case 2:
+				case 1:
 					c = "gray";
 					break;
-				case 3:
+				case 2:
 					c = "light blue";
 					break;
 				default:
@@ -772,15 +779,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 					break;
 				}
 				break;
-			case 3:
+			case 2:
 				switch ((int) b / 25) {
+				case 0:
+					c = "green";
+					break;
 				case 1:
 					c = "green";
 					break;
 				case 2:
-					c = "green";
-					break;
-				case 3:
 					c = "light blue";
 					break;
 				default:
@@ -790,13 +797,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			default:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "light green";
 					break;
-				case 2:
+				case 1:
 					c = "green";
 					break;
-				case 3:
+				case 2:
 					c = "cian";
 					break;
 				default:
@@ -806,49 +813,49 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			}
 			break;
-		case 3:
+		case 2:
 			switch ((int) g / 25) {
-			case 1:
+			case 0:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "light red";
 					break;
-				case 2:
+				case 1:
 					c = "pink";
 					break;
-				case 3:
+				case 2:
 					c = "purple";
 					break;
 				default:
 					c = "purple";
+					break;
+				}
+				break;
+			case 1:
+				switch ((int) b / 25) {
+				case 0:
+					c = "light brown";
+					break;
+				case 1:
+					c = "light pink";
+					break;
+				case 2:
+					c = "violet";
+					break;
+				default:
+					c = "violet";
 					break;
 				}
 				break;
 			case 2:
 				switch ((int) b / 25) {
-				case 1:
-					c = "light brown";
-					break;
-				case 2:
-					c = "light pink";
-					break;
-				case 3:
-					c = "violet";
-					break;
-				default:
-					c = "violet";
-					break;
-				}
-				break;
-			case 3:
-				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "dark yellow";
 					break;
-				case 2:
+				case 1:
 					c = "beige";
 					break;
-				case 3:
+				case 2:
 					c = "light gray";
 					break;
 				default:
@@ -858,13 +865,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			default:
 				switch ((int) b / 25) {
+				case 0:
+					c = "light green";
+					break;
 				case 1:
 					c = "light green";
 					break;
 				case 2:
-					c = "light green";
-					break;
-				case 3:
 					c = "light cian";
 					break;
 				default:
@@ -876,15 +883,31 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 			break;
 		default:
 			switch ((int) g / 25) {
-			case 1:
+			case 0:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "red";
+					break;
+				case 1:
+					c = "pink";
 					break;
 				case 2:
 					c = "pink";
 					break;
-				case 3:
+				default:
+					c = "pink";
+					break;
+				}
+				break;
+			case 1:
+				switch ((int) b / 25) {
+				case 0:
+					c = "orange";
+					break;
+				case 1:
+					c = "light pink";
+					break;
+				case 2:
 					c = "pink";
 					break;
 				default:
@@ -894,29 +917,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			case 2:
 				switch ((int) b / 25) {
-				case 1:
-					c = "orange";
-					break;
-				case 2:
-					c = "light pink";
-					break;
-				case 3:
-					c = "pink";
-					break;
-				default:
-					c = "pink";
-					break;
-				}
-				break;
-			case 3:
-				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "light orange";
 					break;
-				case 2:
+				case 1:
 					c = "beige";
 					break;
-				case 3:
+				case 2:
 					c = "light pink";
 					break;
 				default:
@@ -926,13 +933,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			default:
 				switch ((int) b / 25) {
-				case 1:
+				case 0:
 					c = "yellow";
 					break;
-				case 2:
+				case 1:
 					c = "light yellow";
 					break;
-				case 3:
+				case 2:
 					c = "light beige";
 					break;
 				default:
