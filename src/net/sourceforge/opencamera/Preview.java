@@ -739,10 +739,208 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback,
 
 			break;
 		case 2:
+			switch ((int) g / 25) {
+			case 1:
+				switch ((int) b / 25) {
+				case 1:
+					c = "bordeux";
+					break;
+				case 2:
+					c = "purple";
+					break;
+				case 3:
+					c = "purple";
+					break;
+				default:
+					c = "purple";
+					break;
+				}
+				break;
+			case 2:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light brown";
+					break;
+				case 2:
+					c = "gray";
+					break;
+				case 3:
+					c = "light blue";
+					break;
+				default:
+					c = "blue";
+					break;
+				}
+				break;
+			case 3:
+				switch ((int) b / 25) {
+				case 1:
+					c = "green";
+					break;
+				case 2:
+					c = "green";
+					break;
+				case 3:
+					c = "light blue";
+					break;
+				default:
+					c = "blue";
+					break;
+				}
+				break;
+			default:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light green";
+					break;
+				case 2:
+					c = "green";
+					break;
+				case 3:
+					c = "cian";
+					break;
+				default:
+					c = "light blue";
+					break;
+				}
+				break;
+			}
 			break;
 		case 3:
+			switch ((int) g / 25) {
+			case 1:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light red";
+					break;
+				case 2:
+					c = "pink";
+					break;
+				case 3:
+					c = "purple";
+					break;
+				default:
+					c = "purple";
+					break;
+				}
+				break;
+			case 2:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light brown";
+					break;
+				case 2:
+					c = "light pink";
+					break;
+				case 3:
+					c = "violet";
+					break;
+				default:
+					c = "violet";
+					break;
+				}
+				break;
+			case 3:
+				switch ((int) b / 25) {
+				case 1:
+					c = "dark yellow";
+					break;
+				case 2:
+					c = "beige";
+					break;
+				case 3:
+					c = "light gray";
+					break;
+				default:
+					c = "light blue";
+					break;
+				}
+				break;
+			default:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light green";
+					break;
+				case 2:
+					c = "light green";
+					break;
+				case 3:
+					c = "light cian";
+					break;
+				default:
+					c = "light blue";
+					break;
+				}
+				break;
+			}
 			break;
 		default:
+			switch ((int) g / 25) {
+			case 1:
+				switch ((int) b / 25) {
+				case 1:
+					c = "red";
+					break;
+				case 2:
+					c = "pink";
+					break;
+				case 3:
+					c = "pink";
+					break;
+				default:
+					c = "pink";
+					break;
+				}
+				break;
+			case 2:
+				switch ((int) b / 25) {
+				case 1:
+					c = "orange";
+					break;
+				case 2:
+					c = "light pink";
+					break;
+				case 3:
+					c = "pink";
+					break;
+				default:
+					c = "pink";
+					break;
+				}
+				break;
+			case 3:
+				switch ((int) b / 25) {
+				case 1:
+					c = "light orange";
+					break;
+				case 2:
+					c = "beige";
+					break;
+				case 3:
+					c = "light pink";
+					break;
+				default:
+					c = "light pink";
+					break;
+				}
+				break;
+			default:
+				switch ((int) b / 25) {
+				case 1:
+					c = "yellow";
+					break;
+				case 2:
+					c = "light yellow";
+					break;
+				case 3:
+					c = "light beige";
+					break;
+				default:
+					c = "whitish gray";
+					break;
+				}
+				break;
+			}
 			break;
 		}
 		return c;
